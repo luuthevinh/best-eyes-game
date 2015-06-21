@@ -5,7 +5,7 @@
 
 USING_NS_CC;
 
-class OverScene : public cocos2d::Layer
+class OverScene : public cocos2d::LayerColor
 {
 public:
     // there's no 'id' in cpp, so we recommend returning the class instance pointer
@@ -16,6 +16,9 @@ public:
     
     // implement the "static create()" method manually
 	CREATE_FUNC(OverScene);
+private:
+	void gotoPlayScene();
+	void gotoMenuScene();
 };
 
 #endif // __OVER_SCENE_H__
