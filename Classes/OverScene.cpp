@@ -1,16 +1,19 @@
 #include "OverScene.h"
 #include "Definitions.h"
 #include "PlayScene.h"
+#include "MenuScene.h"
 
 USING_NS_CC;
 
-Scene* OverScene::createScene()
+Scene* OverScene::createScene(int score, int error)
 {
     // 'scene' is an autorelease object
     auto scene = Scene::create();
     
     // 'layer' is an autorelease object
     auto layer = OverScene::create();
+	layer->setScore(score);
+	layer->setError(error);
 
     // add layer as a child to scene
     scene->addChild(layer);
@@ -35,8 +38,13 @@ bool OverScene::init()
     /////////////////////////////
 
 	auto scoreBG = Sprite::create("ScoreBG.png");
-	scoreBG->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2);
+	scoreBG->setPosition(origin.x + visibleSize.width / 2, origin.y + (visibleSize.height / 5) * 2);
 	this->addChild(scoreBG);
+
+	auto errorBG = Sprite::create("ErrorBG.png");
+	errorBG->setPosition(scoreBG->getBoundingBox().getMaxX() - errorBG->getContentSize().width / 2, 
+						scoreBG->getBoundingBox().getMaxY() + errorBG->getContentSize().height / 2 + BUTTON_GAP);
+	this->addChild(errorBG);
 
 	auto highBG = Sprite::create("BestBG.png");
 	highBG->setPosition(scoreBG->getBoundingBox().getMinX() - highBG->getContentSize().width / 2 - BUTTON_GAP,
@@ -59,7 +67,66 @@ bool OverScene::init()
 	menu->setPosition(0, 0);
 	this->addChild(menu);
 
+	//Score
+	auto scoreLabel = LabelTTF::create("0", "fonts/arial.ttf", 120);
+	scoreLabel->setPosition(scoreBG->getBoundingBox().getMidX(), scoreBG->getBoundingBox().getMidY());
+	scoreLabel->setColor(Color3B::WHITE);
+	scoreLabel->setName("score");
+
+	this->addChild(scoreLabel);
+
+	//Error
+	auto errorLabel = LabelTTF::create("0", "fonts/arial.ttf", 30);
+	errorLabel->setPosition(errorBG->getBoundingBox().getMidX(), errorBG->getBoundingBox().getMidY() - 10);
+	errorLabel->setColor(Color3B::WHITE);
+	errorLabel->setName("error");
+
+	this->addChild(errorLabel);
+
+	//Score
+	int best = UserDefault::getInstance()->getIntegerForKey("HIGHSCORE");
+	auto bestLabel = LabelTTF::create(String::createWithFormat("%d", best)->getCString(), "fonts/arial.ttf", 50);
+	bestLabel->setPosition(highBG->getBoundingBox().getMidX(), highBG->getBoundingBox().getMidY() - 10);
+	bestLabel->setColor(Color3B::WHITE);
+	bestLabel->setName("best");
+
+	this->addChild(bestLabel);
+
+	//Update
+	this->scheduleUpdate();
+
+	//Eye
+	auto eye = Sprite::create("Eye.png");
+	eye->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height - 100);
+	this->addChild(eye);
+
+	//Text
+	auto resultText = LabelTTF::create("Wow! You have dog's eyesight.", "fonts/arial.ttf", 20);
+	resultText->setPosition(eye->getPositionX(), eye->getBoundingBox().getMinY() - 20);
+	resultText->setName("result");
+	resultText->setColor(Color3B::BLACK);
+	resultText->setVisible(false);
+
+	this->addChild(resultText);
+
+	//RankProgress
+	_rankProgress = RankProgress::create();
+	_rankProgress->setPosition(origin.x + visibleSize.width / 2, eye->getBoundingBox().getMinY() - 50);
+
+	this->addChild(_rankProgress);
+
+
     return true;
+}
+
+void OverScene::setScore(int score)
+{
+	_score = score;
+}
+
+void OverScene::setError(int error)
+{
+	_error = error;
 }
 
 void OverScene::gotoPlayScene()
@@ -70,6 +137,105 @@ void OverScene::gotoPlayScene()
 
 void OverScene::gotoMenuScene()
 {
-	auto menuscene = PlayScene::createScene();
+	auto menuscene = MenuScene::createScene();
 	Director::getInstance()->replaceScene(TransitionMoveInL::create(0.25f, menuscene));
+}
+
+void OverScene::showResult(float dt)
+{
+	auto label = this->getChildByName("result");
+	if (auto lb = dynamic_cast<LabelTTF*>(label))
+	{
+		std::string text = "Let's play again.";
+
+		if (_score > 0)
+		{
+			int type = _score / (MAX_SCORE / 6);
+			
+			switch (type)
+			{
+			case 0:
+			{
+				text = "You have bat's eyesight.";
+				break;
+			}
+			case 1:
+			{
+				text = "You have mole's eyesight.";
+				break;
+			}
+			case 2:
+			{
+				text = "Ohh! You have dog's eyesight.";
+				break;
+			}
+			case 3:
+			{
+				text = "Ohh! You have cat's eyesight.";
+				break;
+			}
+			case 4:
+			{
+				text = "Wow! You have tiger's eyesight.";
+				break;
+			}
+			case 5:
+			{
+				text = "Wow! You have hawk's eyesight.";
+				break;
+			}
+			default:
+			{
+				text = "Huh! Are you robot?";
+				break;
+			}
+			}
+		}
+
+		lb->setString(text);
+		lb->setVisible(true);
+	}
+}
+
+void OverScene::onEnter()
+{
+	LayerColor::onEnter();
+
+	auto label = this->getChildByName("score");
+	if (auto lb = dynamic_cast<LabelTTF*>(label))
+	{
+		lb->setString(String::createWithFormat("%d", _score)->getCString());
+	}
+
+	auto label2 = this->getChildByName("error");
+	if (auto lb = dynamic_cast<LabelTTF*>(label2))
+	{
+		lb->setString(String::createWithFormat("%d", _error)->getCString());
+	}
+
+	//So voi HighScore
+	int highScore = UserDefault::getInstance()->getIntegerForKey("HIGHSCORE");
+
+	if (_score > highScore)
+	{
+		UserDefault::getInstance()->setIntegerForKey("HIGHSCORE", _score);
+		UserDefault::getInstance()->setIntegerForKey("ERROR", _error);
+	}
+
+	//
+	if (_score > MAX_SCORE)
+	{
+		_rankProgress->runToPercent(1.0f, 100);
+	}
+	else
+	{
+		_rankProgress->runToPercent(1.0f, ((float)_score / MAX_SCORE) * 100);
+	}
+
+	scheduleOnce(schedule_selector(OverScene::showResult), 1.0f);
+}
+
+void OverScene::update(float dt)
+{
+	
 }

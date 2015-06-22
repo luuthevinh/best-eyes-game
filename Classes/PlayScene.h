@@ -25,6 +25,7 @@ private:
 	Vec2 _scoreIndex;
 	Vec2 _touchIndex;
 	int _score;
+	int _error;
 
 	int _gridRow;
 	int _gridColumn;

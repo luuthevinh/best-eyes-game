@@ -45,10 +45,11 @@ bool PlayScene::init()
 
 	//Init
 	_score = 0;
+	_error = 0;
 	_timer = 0.0f;
 	_totalTime = 10.0f;
 
-	_gridCenter = Vec2(visibleSize.width / 2, visibleSize.height / 2);
+	_gridCenter = Vec2(visibleSize.width / 2, (visibleSize.height / 5) * 2);
 
 	createLevel();
 
@@ -64,6 +65,26 @@ bool PlayScene::init()
 	_progress->setPercentage(0);
 	_progress->setMidpoint(Vec2(0.0, 0.0f));
 	this->addChild(_progress);
+
+	//Score
+	auto scoreLabel = LabelTTF::create("0", "fonts/arial.ttf", 50);
+	scoreLabel->setPosition(origin.x + 20, origin.y + visibleSize.height - 150);
+	scoreLabel->setAnchorPoint(Vec2(0, 0.5f));
+	scoreLabel->setColor(Color3B::BLACK);
+	scoreLabel->setName("score");
+	scoreLabel->setHorizontalAlignment(TextHAlignment::LEFT);
+
+	this->addChild(scoreLabel);
+
+	//Error
+	auto errorLabel = LabelTTF::create("0", "fonts/arial.ttf", 50);
+	errorLabel->setPosition(origin.x + visibleSize.width - 20, origin.y + visibleSize.height - 150);
+	errorLabel->setAnchorPoint(Vec2(1.0f, 0.5f));
+	errorLabel->setColor(Color3B::RED);
+	errorLabel->setName("error");
+	errorLabel->setHorizontalAlignment(TextHAlignment::RIGHT);
+
+	this->addChild(errorLabel);
 
     return true;
 }
@@ -86,6 +107,7 @@ void PlayScene::drawSquare(int width, Vec2 position, float opacity)
 	drawnode->drawPolygon(rectangle, 4, color, 0, color);
 	drawnode->setPosition(position.x + _squareWidth / 2, position.y - _squareWidth / 2);
 	drawnode->setName("square");
+
 }
 
 void PlayScene::drawGrid(int row, int col)
@@ -144,27 +166,51 @@ Vec2 PlayScene::getTouchIndex(Vec2 touchlocation)
 		}
 	}
 
-	return Vec2::ZERO;
+	return Vec2(-1, -1);
 }
 
 void PlayScene::checkScore()
 {
+	if (_touchIndex == Vec2(-1, -1))
+		return;
+
 	if (_touchIndex == _scoreIndex)
 	{
 		_score++;
+
+		auto label = this->getChildByName("score");
+		//if (auto lb = dynamic_cast<LabelTTF*>(label))
+		//if (typeid(label) == typeid(LabelTTF*))
+		{
+			//lb->setString(String::createWithFormat("%d", _score)->getCString());
+			static_cast<LabelTTF*>(label)->setString(String::createWithFormat("%d", _score)->getCString());
+		}
 
 		//Xoa grid
 		auto squares = this->getChildren();
 		for (Vector<Node*>::iterator it = squares.begin(); it != squares.end(); it++)
 		{
-			if (auto dn = dynamic_cast<DrawNode*>(*it))
+			//if (auto dn = dynamic_cast<DrawNode*>(*it))
+			if ((*it)->getName() == "square")
 			{
-				dn->removeFromParent();
+				(*it)->removeFromParent();
 			}
 		}
 
 		//Khoi tao moi
 		createLevel();
+	}
+	else
+	{
+		_error++;
+
+		auto label = this->getChildByName("error");
+		if (auto lb = dynamic_cast<LabelTTF*>(label))
+		{
+			lb->setString(String::createWithFormat("%d", _error)->getCString());
+		}
+
+		_timer += 5;
 	}
 }
 
@@ -176,50 +222,47 @@ void PlayScene::createLevel()
 	{
 		case 0:
 		{
-			_squareWidth = 200;
 			_gridColumn = 2;
-			_gridRow = 1;
+			_gridRow = 2;
+			_squareWidth = (Director::getInstance()->getVisibleSize().width - (BUTTON_GAP * (_gridColumn + 1))) / _gridColumn;
 			_opacityScoreSquare = 0.5f;
 			break;
 		}
 		case 1:
 		{
-			_squareWidth = 100;
 			_gridColumn = 3;
 			_gridRow = 3;
-			_opacityScoreSquare = 0.5f;
+			_squareWidth = (Director::getInstance()->getVisibleSize().width - (BUTTON_GAP * (_gridColumn + 1))) / _gridColumn;
+			_opacityScoreSquare = 0.55f;
 			break;
 		}
 		case 3:
 		{
-			_squareWidth = 100;
 			_gridColumn = 4;
 			_gridRow = 4;
+			_squareWidth = (Director::getInstance()->getVisibleSize().width - (BUTTON_GAP * (_gridColumn + 1))) / _gridColumn;
 			_opacityScoreSquare = 0.6f;
 			break;
 		}
 		case 6:
 		{
-			_squareWidth = 80;
 			_gridColumn = 5;
 			_gridRow = 5;
-			_opacityScoreSquare = 0.6f;
+			_squareWidth = (Director::getInstance()->getVisibleSize().width - (BUTTON_GAP * (_gridColumn + 1))) / _gridColumn;
+			_opacityScoreSquare = 0.65f;
 			break;
 		}
 		case 9:
 		{
-			_squareWidth = 60;
 			_gridColumn = 7;
 			_gridRow = 7;
+			_squareWidth = (Director::getInstance()->getVisibleSize().width - (BUTTON_GAP * (_gridColumn + 1))) / _gridColumn;
 			_opacityScoreSquare = 0.7f;
 			break;
 		}
 
-		case 11:
+		case 13:
 		{
-			_squareWidth = 50;
-			_gridColumn = 8;
-			_gridRow = 8;
 			_opacityScoreSquare = 0.8f;
 			break;
 		}
@@ -256,9 +299,9 @@ void PlayScene::update(float dt)
 
 	if (_timer > _totalTime)
 	{
-		log("THUA THUA THUA...");
+		//log("THUA THUA THUA...");
 		this->pause();
-		auto overscene = OverScene::createScene();
-		Director::getInstance()->replaceScene(TransitionMoveInR::create(0.25f, overscene));
+		auto overscene = OverScene::createScene(_score, _error);
+		Director::getInstance()->replaceScene(overscene);
 	}
 }

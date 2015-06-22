@@ -63,5 +63,5 @@ bool MenuScene::init()
 void MenuScene::gotoPlayScene()
 {
 	auto playScene = PlayScene::createScene();
-	Director::getInstance()->replaceScene(TransitionMoveInR::create(0.25f, playScene));
+	Director::getInstance()->replaceScene(playScene);
 }
