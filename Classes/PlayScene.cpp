@@ -1,6 +1,7 @@
 ﻿#include "PlayScene.h"
 #include "Definitions.h"
 #include "OverScene.h"
+#include "MenuScene.h"
 
 USING_NS_CC;
 
@@ -67,7 +68,7 @@ bool PlayScene::init()
 	this->addChild(_progress);
 
 	//Score
-	auto scoreLabel = LabelTTF::create("0", "fonts/arial.ttf", 50);
+	auto scoreLabel = LabelTTF::create("0", "fonts/Roboto-Bold.ttf", 50);
 	scoreLabel->setPosition(origin.x + 20, origin.y + visibleSize.height - 150);
 	scoreLabel->setAnchorPoint(Vec2(0, 0.5f));
 	scoreLabel->setColor(Color3B::BLACK);
@@ -76,8 +77,15 @@ bool PlayScene::init()
 
 	this->addChild(scoreLabel);
 
+	//TEXT
+	auto scoreText = LabelTTF::create("score", "fonts/arial.ttf", 20);
+	scoreText->setPosition(scoreLabel->getBoundingBox().getMidX(), scoreLabel->getBoundingBox().getMinY() - scoreText->getContentSize().height / 2 - 2);
+	scoreText->setColor(Color3B::BLACK);
+
+	this->addChild(scoreText);
+
 	//Error
-	auto errorLabel = LabelTTF::create("0", "fonts/arial.ttf", 50);
+	auto errorLabel = LabelTTF::create("0", "fonts/Roboto-Bold.ttf", 50);
 	errorLabel->setPosition(origin.x + visibleSize.width - 20, origin.y + visibleSize.height - 150);
 	errorLabel->setAnchorPoint(Vec2(1.0f, 0.5f));
 	errorLabel->setColor(Color3B::RED);
@@ -85,6 +93,21 @@ bool PlayScene::init()
 	errorLabel->setHorizontalAlignment(TextHAlignment::RIGHT);
 
 	this->addChild(errorLabel);
+
+	//Text
+	auto errorText = LabelTTF::create("error", "fonts/arial.ttf", 20);
+	errorText->setPosition(errorLabel->getBoundingBox().getMidX(), errorLabel->getBoundingBox().getMinY() - errorText->getContentSize().height / 2 - 2);
+	errorText->setColor(Color3B::BLACK);
+	this->addChild(errorText);
+
+	//Menu
+	auto menuBtn = MenuItemImage::create("MenuBtn_48x43.png", "MenuBtn_48x43.png", CC_CALLBACK_0(PlayScene::gotoMenuScene, this));
+	menuBtn->setPosition(	origin.x + menuBtn->getContentSize().width,
+							origin.y + menuBtn->getContentSize().height);
+
+	auto menu = Menu::create(menuBtn, nullptr);
+	menu->setPosition(0, 0);
+	this->addChild(menu);
 
     return true;
 }
@@ -304,4 +327,10 @@ void PlayScene::update(float dt)
 		auto overscene = OverScene::createScene(_score, _error);
 		Director::getInstance()->replaceScene(overscene);
 	}
+}
+
+void PlayScene::gotoMenuScene()
+{
+	auto menu = MenuScene::createScene();
+	Director::getInstance()->replaceScene(menu);
 }

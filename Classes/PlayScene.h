@@ -46,6 +46,8 @@ private:
 
 	bool onTouchBegan(Touch* touch, Event* event);
 	void update(float dt);
+
+	void gotoMenuScene();
 };
 
 #endif // __PLAY_SCENE_H__

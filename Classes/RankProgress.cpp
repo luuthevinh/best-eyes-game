@@ -47,7 +47,7 @@ void RankProgress::runToPercent(float time, float percent)
 	ProgressFromTo* to = ProgressFromTo::create(time, 0, percent);
 	_progressBar->runAction(to);
 
-	int num = percent / (_progressBar->getContentSize().width / 6);
+	_toPercent = percent;
 	
 }
 
@@ -59,11 +59,13 @@ void RankProgress::update(float dt)
 		int num = ((percent / 100) * _progressBar->getContentSize().width) / (_progressBar->getContentSize().width / 6);
 		auto child = this->getChildByName(String::createWithFormat("sun_%d", num)->getCString());
 
+		float topercent = _toPercent;
+
 		if (auto sprite = dynamic_cast<Sprite*>(child))
 		{
-			auto func = CallFunc::create([sprite, percent]()
+			auto func = CallFunc::create([sprite, topercent]()
 			{
-				if (percent >= 100)
+				if (topercent >= 100)
 				{
 					sprite->setSpriteFrame(SpriteFrame::create("RedSun.png", sprite->getTextureRect()));
 				}

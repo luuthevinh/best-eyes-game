@@ -1,5 +1,6 @@
 #include "MenuScene.h"
 #include "PlayScene.h"
+#include "AchievementScene.h"
 
 Scene* MenuScene::createScene()
 {
@@ -33,7 +34,7 @@ bool MenuScene::init()
 	auto playBtn = MenuItemImage::create("PlayBtn.png", "PlayBtn.png", CC_CALLBACK_0(MenuScene::gotoPlayScene, this));
 	playBtn->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2);
 
-	auto achievBtn = MenuItemImage::create("AchievementBtn.png", "AchievementBtn.png");
+	auto achievBtn = MenuItemImage::create("AchievementBtn.png", "AchievementBtn.png", CC_CALLBACK_0(MenuScene::gotoAchievementScene, this));
 	achievBtn->setPosition(	playBtn->getPositionX() + playBtn->getContentSize().width / 2 + achievBtn->getContentSize().width / 2 + BUTTON_GAP, 
 							playBtn->getPositionY() + playBtn->getContentSize().height / 2 - achievBtn->getContentSize().height / 2);
 
@@ -41,11 +42,11 @@ bool MenuScene::init()
 	rateBtn->setPosition( playBtn->getPositionX() + playBtn->getContentSize().width / 2 - rateBtn->getContentSize().width / 2, 
 						  playBtn->getPositionY() + playBtn->getContentSize().height / 2 + rateBtn->getContentSize().height / 2 + BUTTON_GAP);
 
-	auto optionBtn = MenuItemImage::create("OptionBtn.png", "OptionBtn.png");
+	auto optionBtn = MenuItemImage::create("RemoveAdsBtn.png", "RemoveAdsBtn.png");
 	optionBtn->setPosition(	playBtn->getBoundingBox().getMinX() + optionBtn->getContentSize().width / 2,
 							playBtn->getBoundingBox().getMinY() - optionBtn->getContentSize().height / 2 - BUTTON_GAP);
 
-	auto exitBtn = MenuItemImage::create("ExitBtn.png", "ExitBtn.png");
+	auto exitBtn = MenuItemImage::create("ExitBtn.png", "ExitBtn.png", CC_CALLBACK_0(MenuScene::exitGame, this));
 	exitBtn->setPosition( optionBtn->getBoundingBox().getMaxX() + exitBtn->getContentSize().width / 2 + BUTTON_GAP, 
 						  optionBtn->getBoundingBox().getMaxY() - exitBtn->getContentSize().height / 2);
 
@@ -64,4 +65,15 @@ void MenuScene::gotoPlayScene()
 {
 	auto playScene = PlayScene::createScene();
 	Director::getInstance()->replaceScene(playScene);
+}
+
+void MenuScene::gotoAchievementScene()
+{
+	auto achiev = AchievementScene::createScene();
+	Director::getInstance()->replaceScene(TransitionMoveInR::create(0.25f, achiev));
+}
+
+void MenuScene::exitGame()
+{
+	exit(0);
 }

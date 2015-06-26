@@ -20,6 +20,8 @@ public:
 
 private:
 	void gotoPlayScene();
+	void gotoAchievementScene();
+	void exitGame();
 };
 
 #endif // __MENU_SCENE_H__

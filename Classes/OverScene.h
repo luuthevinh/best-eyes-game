@@ -23,6 +23,7 @@ public:
 private:
 	int _score;
 	int _error;
+	std::string _screenShotPath;
 
 	float _currentPercent;
 	RankProgress* _rankProgress;
@@ -30,6 +31,8 @@ private:
 	void gotoPlayScene();
 	void gotoMenuScene();
 	void showResult(float dt);
+	void shareScore();
+	void afterCaptured(bool succeed, const std::string& outputFile);
 	
 	void onEnter();
 	void update(float dt);

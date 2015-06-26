@@ -2,6 +2,7 @@
 #include "Definitions.h"
 #include "PlayScene.h"
 #include "MenuScene.h"
+#include "CallCSharp.h"
 
 USING_NS_CC;
 
@@ -39,6 +40,7 @@ bool OverScene::init()
 
 	auto scoreBG = Sprite::create("ScoreBG.png");
 	scoreBG->setPosition(origin.x + visibleSize.width / 2, origin.y + (visibleSize.height / 5) * 2);
+	scoreBG->setName("scoreBG");
 	this->addChild(scoreBG);
 
 	auto errorBG = Sprite::create("ErrorBG.png");
@@ -59,7 +61,7 @@ bool OverScene::init()
 	replayBtn->setPosition(	scoreBG->getBoundingBox().getMaxX() - replayBtn->getContentSize().width / 2,
 							scoreBG->getBoundingBox().getMinY() - replayBtn->getContentSize().height / 2 - BUTTON_GAP);
 
-	auto shareBtn = MenuItemImage::create("ShareBtn.png", "ShareBtn.png");
+	auto shareBtn = MenuItemImage::create("ShareBtn.png", "ShareBtn.png", CC_CALLBACK_0(OverScene::shareScore, this));
 	shareBtn->setPosition(	replayBtn->getBoundingBox().getMinX() - shareBtn->getContentSize().width / 2 - BUTTON_GAP,
 							replayBtn->getBoundingBox().getMaxY() - shareBtn->getContentSize().height / 2);
 					
@@ -191,7 +193,9 @@ void OverScene::showResult(float dt)
 			}
 			}
 		}
+		float a = 1.0f;
 
+		lb->setScale(a);
 		lb->setString(text);
 		lb->setVisible(true);
 	}
@@ -220,6 +224,14 @@ void OverScene::onEnter()
 	{
 		UserDefault::getInstance()->setIntegerForKey("HIGHSCORE", _score);
 		UserDefault::getInstance()->setIntegerForKey("ERROR", _error);
+
+		//New
+		auto newLabel = Sprite::create("NewLabel.png");
+		auto score = this->getChildByName("scoreBG");
+		newLabel->setPosition(	score->getBoundingBox().getMaxX() - newLabel->getContentSize().width / 2 - 10,
+								score->getBoundingBox().getMaxY() - newLabel->getContentSize().height / 2 - 10);
+
+		this->addChild(newLabel);
 	}
 
 	//
@@ -239,3 +251,27 @@ void OverScene::update(float dt)
 {
 	
 }
+
+void OverScene::afterCaptured(bool succeed, const std::string& outputFile)
+{
+	if (succeed)
+	{
+		_screenShotPath = outputFile;
+
+		std::wstring wstr;
+		wstr.assign(_screenShotPath.begin(), _screenShotPath.end());
+
+		BroswerEventHelper::sharePhoto(ref new Platform::String(wstr.c_str()));
+	}
+	else
+	{
+		log("Capture screen failed.");
+	}
+}
+
+void OverScene::shareScore()
+{
+	utils::captureScreen(CC_CALLBACK_2(OverScene::afterCaptured, this), "screenShot.png");
+
+}
+
