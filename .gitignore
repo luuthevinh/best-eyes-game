@@ -6,4 +6,13 @@ proj.ios_mac/
 proj.linux/
 proj.win8.1-universal/
 proj.win32/
-proj.wp8-xaml/
+/proj.wp8-xaml/Debug
+/proj.wp8-xaml/ARM/Debug
+/proj.wp8-xaml/App/Bin
+/proj.wp8-xaml/App/obj
+/proj.wp8-xaml/ipch
+/proj.wp8-xaml/BestEye.opensdf
+/proj.wp8-xaml/BestEye.sdf
+/proj.wp8-xaml/BestEye.v12.suo
+/proj.wp8-xaml/AppComponent/ARM/Debug
+/proj.wp8-xaml/AppComponent/Debug
