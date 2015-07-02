@@ -36,13 +36,13 @@ bool AboutScene::init()
 	logo->setPosition(origin.x + visibleSize.width / 2, origin.y + (visibleSize.height / 4) * 3);
 	this->addChild(logo);
 
-	auto nameLabel = LabelTTF::create("The Best Eyes - 1.0.0", "fonts/arial.ttf", 30);
+	auto nameLabel = LabelTTF::create("The Best Eyes - 1.0.0.1", "fonts/arial.ttf", 30);
 	nameLabel->setColor(Color3B::BLACK);
 	nameLabel->setPosition(origin.x + visibleSize.width / 2, logo->getBoundingBox().getMinY() - nameLabel->getContentSize().height / 2 - 50);
 	this->addChild(nameLabel);
 
 	//
-	auto aboutLabel = LabelTTF::create("Author: Luu The Vinh\nWebsite: 14gamez.com\nLike us on Facebook.", "fonts/arial.ttf", 21);
+	auto aboutLabel = LabelTTF::create("Author: Luu The Vinh\nWebsite: 14gamez.com\nLike us on Facebook", "fonts/arial.ttf", 21);
 	aboutLabel->setColor(Color3B::BLACK);
 	aboutLabel->setPosition(origin.x + visibleSize.width / 2, nameLabel->getBoundingBox().getMinY() - aboutLabel->getContentSize().height / 2 - 80);
 	this->addChild(aboutLabel);

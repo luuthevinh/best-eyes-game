@@ -329,8 +329,6 @@ void PlayScene::createLevel()
 	randomColor();
 
 	drawGrid(_gridRow, _gridColumn);
-
-	
 }
 
 bool PlayScene::onTouchBegan(Touch* touch, Event* event)
@@ -370,13 +368,6 @@ void PlayScene::gotoMenuScene()
 void PlayScene::onEnter()
 {
 	LayerColor::onEnter();
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8)
-	if (!BroswerEventHelper::isBuyRemoveAds())
-	{
-		BroswerEventHelper::showAds(true);
-	}
-#endif
 }
 
 void PlayScene::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* unused_event)

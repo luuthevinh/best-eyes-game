@@ -20,6 +20,8 @@ public:
 
 	void onKeyReleased(EventKeyboard::KeyCode keyCode, Event* unused_event);
 
+	void onEnter();
+
 private:
 	void gotoPlayScene();
 	void gotoAchievementScene();

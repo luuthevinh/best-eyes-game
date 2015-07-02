@@ -74,7 +74,7 @@ namespace cocos2d
                     //ZoneId = "8063",
                     ZoneId = "e2dadc75",
                     UX = VservAdUX.Interstitial,
-                    TimeOut = 100,
+                    //TimeOut = 10,
                     //TestDevice = new List<string>() { deviceID, }
                 };
 

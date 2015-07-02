@@ -78,6 +78,18 @@ bool MenuScene::init()
     return true;
 }
 
+void MenuScene::onEnter()
+{
+	LayerColor::onEnter();
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8)
+	if (!BroswerEventHelper::isBuyRemoveAds())
+	{
+		BroswerEventHelper::showAds(true);
+	}
+#endif
+}
+
 void MenuScene::gotoPlayScene()
 {
 	auto playScene = PlayScene::createScene();
