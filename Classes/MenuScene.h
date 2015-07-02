@@ -18,10 +18,15 @@ public:
     // implement the "static create()" method manually
 	CREATE_FUNC(MenuScene);
 
+	void onKeyReleased(EventKeyboard::KeyCode keyCode, Event* unused_event);
+
 private:
 	void gotoPlayScene();
 	void gotoAchievementScene();
 	void exitGame();
+	void gotoAboutScene();
+	void removeAds();
+	void rateGame();
 };
 
 #endif // __MENU_SCENE_H__

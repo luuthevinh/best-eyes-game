@@ -2,7 +2,11 @@
 #include "Definitions.h"
 #include "PlayScene.h"
 #include "MenuScene.h"
+#include "SimpleAudioEngine.h"
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8)
 #include "CallCSharp.h"
+#endif
 
 USING_NS_CC;
 
@@ -117,6 +121,11 @@ bool OverScene::init()
 
 	this->addChild(_rankProgress);
 
+	//Listener
+	auto keyListener = EventListenerKeyboard::create();
+	keyListener->onKeyReleased = CC_CALLBACK_2(OverScene::onKeyReleased, this);
+
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyListener, this);
 
     return true;
 }
@@ -168,12 +177,12 @@ void OverScene::showResult(float dt)
 			}
 			case 2:
 			{
-				text = "Ohh! You have dog's eyesight.";
+				text = "Great! You have dog's eyesight.";
 				break;
 			}
 			case 3:
 			{
-				text = "Ohh! You have cat's eyesight.";
+				text = "Great! You have cat's eyesight.";
 				break;
 			}
 			case 4:
@@ -188,7 +197,7 @@ void OverScene::showResult(float dt)
 			}
 			default:
 			{
-				text = "Huh! Are you robot?";
+				text = "OMG! Are you robot?";
 				break;
 			}
 			}
@@ -204,6 +213,9 @@ void OverScene::showResult(float dt)
 void OverScene::onEnter()
 {
 	LayerColor::onEnter();
+
+	//Am thanh
+	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("Winning.wav");
 
 	auto label = this->getChildByName("score");
 	if (auto lb = dynamic_cast<LabelTTF*>(label))
@@ -254,6 +266,7 @@ void OverScene::update(float dt)
 
 void OverScene::afterCaptured(bool succeed, const std::string& outputFile)
 {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8)
 	if (succeed)
 	{
 		_screenShotPath = outputFile;
@@ -267,11 +280,29 @@ void OverScene::afterCaptured(bool succeed, const std::string& outputFile)
 	{
 		log("Capture screen failed.");
 	}
+#endif
 }
 
 void OverScene::shareScore()
 {
-	utils::captureScreen(CC_CALLBACK_2(OverScene::afterCaptured, this), "screenShot.png");
+	//utils::captureScreen(CC_CALLBACK_2(OverScene::afterCaptured, this), "screenShot.png");
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8)
+	std::string str = String::createWithFormat("I got %d scores in #TheBestEyes games.", _score)->getCString();
 
+	std::wstring wstr;
+	wstr.assign(str.begin(), str.end());
+
+	BroswerEventHelper::shareGame(ref new Platform::String(wstr.c_str()));
+#endif
+}
+
+void OverScene::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* unused_event)
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8)
+	if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE)
+	{
+		OverScene::gotoMenuScene();
+	}
+#endif
 }
 

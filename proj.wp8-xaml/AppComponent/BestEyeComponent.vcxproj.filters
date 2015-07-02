@@ -34,9 +34,6 @@
     <ClCompile Include="..\..\Classes\IntroScene.cpp">
       <Filter>Classes\Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Classes\OptionScene.cpp">
-      <Filter>Classes\Scenes</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Classes\OverScene.cpp">
       <Filter>Classes\Scenes</Filter>
     </ClCompile>
@@ -85,9 +82,6 @@
       <Filter>Classes\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Classes\IntroScene.h">
-      <Filter>Classes\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Classes\OptionScene.h">
       <Filter>Classes\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Classes\OverScene.h">

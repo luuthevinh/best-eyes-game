@@ -11,6 +11,14 @@
   <PropertyGroup>
     <ProjectView>ProjectFiles</ProjectView>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <CurrentDeployCmdId>256</CurrentDeployCmdId>
+    <CurrentDeployID>1AAFB3E8-5202-4480-A5F0-8D44CD04FA32</CurrentDeployID>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <CurrentDeployCmdId>256</CurrentDeployCmdId>
+    <CurrentDeployID>1AAFB3E8-5202-4480-A5F0-8D44CD04FA32</CurrentDeployID>
+  </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
       <FlavorProperties GUID="{C089C8C0-30E0-4E22-80C0-CE093F111A43}">

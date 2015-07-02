@@ -1,7 +1,10 @@
 #include "AchievementScene.h"
 #include "Definitions.h"
 #include "MenuScene.h"
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8)
 #include "CallCSharp.h"
+#endif
 
 Scene* AchievementScene::createScene()
 {
@@ -92,6 +95,11 @@ bool AchievementScene::init()
 
 	this->addChild(bestLabel);
 
+	//Listener
+	auto keyListener = EventListenerKeyboard::create();
+	keyListener->onKeyReleased = CC_CALLBACK_2(AchievementScene::onKeyReleased, this);
+
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyListener, this);
 
     return true;
 }
@@ -138,12 +146,12 @@ void AchievementScene::showResult(float dt)
 			}
 			case 2:
 			{
-				text = "Ohh! You have dog's eyesight.";
+				text = "Great! You have dog's eyesight.";
 				break;
 			}
 			case 3:
 			{
-				text = "Ohh! You have cat's eyesight.";
+				text = "Great! You have cat's eyesight.";
 				break;
 			}
 			case 4:
@@ -158,7 +166,7 @@ void AchievementScene::showResult(float dt)
 			}
 			default:
 			{
-				text = "Huh! Are you robot?";
+				text = "OMG! Are you robot?";
 				break;
 			}
 			}
@@ -177,6 +185,7 @@ void AchievementScene::gotoMenuScene()
 
 void AchievementScene::afterCaptured(bool succeed, const std::string& outputFile)
 {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8)
 	if (succeed)
 	{
 		std::wstring wstr;
@@ -188,10 +197,28 @@ void AchievementScene::afterCaptured(bool succeed, const std::string& outputFile
 	{
 		log("Capture screen failed.");
 	}
+#endif
 }
 
 void AchievementScene::shareScore()
 {
-	utils::captureScreen(CC_CALLBACK_2(AchievementScene::afterCaptured, this), "screenShot_BestScore.png");
+	//utils::captureScreen(CC_CALLBACK_2(AchievementScene::afterCaptured, this), "screenShot_BestScore.png");
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8)
+	std::string str = String::createWithFormat("I got %d scores in #TheBestEyes games.", _bestScore)->getCString();
 
+	std::wstring wstr;
+	wstr.assign(str.begin(), str.end());
+
+	BroswerEventHelper::shareGame(ref new Platform::String(wstr.c_str()));
+#endif
+}
+
+void AchievementScene::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* unused_event)
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8)
+	if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE)
+	{
+		AchievementScene::gotoMenuScene();
+	}
+#endif
 }

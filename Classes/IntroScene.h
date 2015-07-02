@@ -16,6 +16,8 @@ public:
     
     // implement the "static create()" method manually
 	CREATE_FUNC(IntroScene);
+private:
+	void gotoMenuScene(float dt);
 };
 
 #endif // __INTRO_SCENE_H__

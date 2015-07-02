@@ -359,4 +359,35 @@ namespace cocos2d
 
 
     }
+
+    public class AppSettings
+    {
+        private static bool _displayAds = true;
+        private static bool _isAdBlockerActive = false;
+
+        public static bool IsAdBlockerActive
+        {
+            get
+            {
+                return _isAdBlockerActive;
+            }
+            set
+            {
+                _isAdBlockerActive = value;
+            }
+        }
+
+        public static bool DisplayAds
+        {
+            get
+            {
+                return _displayAds;
+            }
+            set
+            {
+                _displayAds = value;
+            }
+        }
+
+    }
 }

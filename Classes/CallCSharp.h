@@ -14,6 +14,9 @@ namespace cocos2d
 		virtual void sharePhoto(Platform::String ^path);
 		virtual void rateGame();
 		virtual void likePage();
+		virtual void showAds(bool isshow);
+		virtual void removeAds();
+		virtual bool isBuyRemoveAds();
 	};
 
 	public ref class BroswerEventHelper sealed
@@ -25,6 +28,9 @@ namespace cocos2d
 		static void sharePhoto(Platform::String ^path);
 		static void rateGame();
 		static void likePage();
+		static void showAds(bool isshow);
+		static void removeAds();
+		static bool isBuyRemoveAds();
 	};
 
 }

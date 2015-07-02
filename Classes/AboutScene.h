@@ -5,7 +5,7 @@
 
 USING_NS_CC;
 
-class AboutScene : public cocos2d::Layer
+class AboutScene : public cocos2d::LayerColor
 {
 public:
     // there's no 'id' in cpp, so we recommend returning the class instance pointer
@@ -16,6 +16,12 @@ public:
     
     // implement the "static create()" method manually
 	CREATE_FUNC(AboutScene);
+
+	void onKeyReleased(EventKeyboard::KeyCode keyCode, Event* unused_event);
+
+private:
+	void gotoMenuScene();
+	void likeFB();
 };
 
 #endif // __ABOUT_SCENE_H__

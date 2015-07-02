@@ -18,6 +18,8 @@ public:
     // implement the "static create()" method manually
 	CREATE_FUNC(OverScene);
 
+	void onKeyReleased(EventKeyboard::KeyCode keyCode, Event* unused_event);
+
 	void setScore(int score);
 	void setError(int error);
 private:

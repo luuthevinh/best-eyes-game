@@ -17,6 +17,8 @@ public:
     // implement the "static create()" method manually
 	CREATE_FUNC(PlayScene);
 
+	void onKeyReleased(EventKeyboard::KeyCode keyCode, Event* unused_event);
+
 private:
 	float _squareWidth;
 	Color4F _colorLevel;
@@ -36,6 +38,8 @@ private:
 	float _totalTime;
 	ProgressTimer* _progress;
 
+	bool _isStart;
+
 	void drawSquare(int width, Vec2 position, float opacity = 1);
 	void drawGrid(int row, int col);
 	void randomColor();
@@ -48,6 +52,7 @@ private:
 	void update(float dt);
 
 	void gotoMenuScene();
+	void onEnter();
 };
 
 #endif // __PLAY_SCENE_H__

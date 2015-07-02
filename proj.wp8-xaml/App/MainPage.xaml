@@ -23,6 +23,10 @@
             <TextBlock x:Name="PeakMemoryTextBlock"/>
             <TextBlock Text=" MB"/>
         </StackPanel>
+        <StackPanel x:Name="adPanel" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            
+        </StackPanel>
+
     </DrawingSurfaceBackgroundGrid>
 
 </phone:PhoneApplicationPage>

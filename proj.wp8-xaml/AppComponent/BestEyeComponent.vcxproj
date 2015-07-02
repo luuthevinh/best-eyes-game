@@ -186,7 +186,6 @@
     <ClCompile Include="..\..\Classes\CallCSharp.cpp" />
     <ClCompile Include="..\..\Classes\IntroScene.cpp" />
     <ClCompile Include="..\..\Classes\MenuScene.cpp" />
-    <ClCompile Include="..\..\Classes\OptionScene.cpp" />
     <ClCompile Include="..\..\Classes\OverScene.cpp" />
     <ClCompile Include="..\..\Classes\PlayScene.cpp" />
     <ClCompile Include="..\..\Classes\RankProgress.cpp" />
@@ -210,7 +209,6 @@
     <ClInclude Include="..\..\Classes\Definitions.h" />
     <ClInclude Include="..\..\Classes\IntroScene.h" />
     <ClInclude Include="..\..\Classes\MenuScene.h" />
-    <ClInclude Include="..\..\Classes\OptionScene.h" />
     <ClInclude Include="..\..\Classes\OverScene.h" />
     <ClInclude Include="..\..\Classes\PlayScene.h" />
     <ClInclude Include="..\..\Classes\RankProgress.h" />

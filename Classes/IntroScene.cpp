@@ -1,4 +1,5 @@
 #include "IntroScene.h"
+#include "MenuScene.h"
 
 USING_NS_CC;
 
@@ -31,6 +32,18 @@ bool IntroScene::init()
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
     /////////////////////////////
-    
+
+	auto logo = Sprite::create("logo.png");
+	logo->setPosition(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2);
+	this->addChild(logo);
+
+	this->scheduleOnce(schedule_selector(IntroScene::gotoMenuScene), 2.0f);
+
     return true;
+}
+
+void IntroScene::gotoMenuScene(float dt)
+{
+	auto menu = MenuScene::createScene();
+	Director::getInstance()->replaceScene(menu);
 }

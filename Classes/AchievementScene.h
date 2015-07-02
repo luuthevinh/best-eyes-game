@@ -17,6 +17,9 @@ public:
     
     // implement the "static create()" method manually
 	CREATE_FUNC(AchievementScene);
+
+	void onKeyReleased(EventKeyboard::KeyCode keyCode, Event* unused_event);
+
 private:
 	RankProgress* _rankProgress;
 	int _bestScore;

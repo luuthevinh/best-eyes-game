@@ -2,6 +2,11 @@
 #include "Definitions.h"
 #include "OverScene.h"
 #include "MenuScene.h"
+#include "SimpleAudioEngine.h"
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8)
+#include "CallCSharp.h"
+#endif
 
 USING_NS_CC;
 
@@ -41,6 +46,12 @@ bool PlayScene::init()
 
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 
+	//Listener
+	auto keyListener = EventListenerKeyboard::create();
+	keyListener->onKeyReleased = CC_CALLBACK_2(PlayScene::onKeyReleased, this);
+
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyListener, this);
+
 	//Update
 	this->scheduleUpdate();
 
@@ -49,6 +60,7 @@ bool PlayScene::init()
 	_error = 0;
 	_timer = 0.0f;
 	_totalTime = 10.0f;
+	_isStart = false;
 
 	_gridCenter = Vec2(visibleSize.width / 2, (visibleSize.height / 5) * 2);
 
@@ -63,7 +75,7 @@ bool PlayScene::init()
 	_progress->setType(ProgressTimerType::BAR);
 	_progress->setPosition(Point(origin.x + visibleSize.width / 2, origin.y + visibleSize.height -  _progress->getContentSize().height / 2));
 	_progress->setBarChangeRate(Vec2(1, 0));
-	_progress->setPercentage(0);
+	_progress->setPercentage(100);
 	_progress->setMidpoint(Vec2(0.0, 0.0f));
 	this->addChild(_progress);
 
@@ -108,6 +120,14 @@ bool PlayScene::init()
 	auto menu = Menu::create(menuBtn, nullptr);
 	menu->setPosition(0, 0);
 	this->addChild(menu);
+
+	//Tuts
+	auto tutsText = LabelTTF::create("Choose different color block.", "fonts/arial.ttf", 21);
+	tutsText->setAnchorPoint(Vec2(1.0f, 0.5f));
+	tutsText->setPosition(origin.x + visibleSize.width - 10, origin.y + 40);
+	tutsText->setColor(Color3B::BLACK);
+	tutsText->setName("tuts");
+	this->addChild(tutsText);
 
     return true;
 }
@@ -199,6 +219,13 @@ void PlayScene::checkScore()
 
 	if (_touchIndex == _scoreIndex)
 	{
+		if (!_isStart)
+		{
+			_isStart = true;
+			this->removeChildByName("tuts");
+		}
+			
+
 		_score++;
 
 		auto label = this->getChildByName("score");
@@ -308,6 +335,9 @@ void PlayScene::createLevel()
 
 bool PlayScene::onTouchBegan(Touch* touch, Event* event)
 {
+	//Am thanh
+	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("Touch.wav");
+
 	_touchIndex = getTouchIndex(touch->getLocation());
 	checkScore();
 
@@ -316,9 +346,11 @@ bool PlayScene::onTouchBegan(Touch* touch, Event* event)
 
 void PlayScene::update(float dt)
 {
-	_timer += dt;
-
-	_progress->setPercentage(100 - ((_timer / _totalTime) * 100.0f));
+	if (_isStart)
+	{
+		_timer += dt;
+		_progress->setPercentage(100 - ((_timer / _totalTime) * 100.0f));
+	}
 
 	if (_timer > _totalTime)
 	{
@@ -333,4 +365,28 @@ void PlayScene::gotoMenuScene()
 {
 	auto menu = MenuScene::createScene();
 	Director::getInstance()->replaceScene(menu);
+}
+
+void PlayScene::onEnter()
+{
+	LayerColor::onEnter();
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8)
+	if (!BroswerEventHelper::isBuyRemoveAds())
+	{
+		BroswerEventHelper::showAds(true);
+	}
+#endif
+}
+
+void PlayScene::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* unused_event)
+{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8)
+	if (keyCode == EventKeyboard::KeyCode::KEY_ESCAPE)
+	{
+		this->pause();
+		auto overscene = OverScene::createScene(_score, _error);
+		Director::getInstance()->replaceScene(overscene);
+	}
+#endif
 }

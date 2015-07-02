@@ -25,6 +25,9 @@ using System.Windows.Threading;
 using Microsoft.Phone.Info;
 using Windows.Graphics.Display;
 using Microsoft.Phone.Tasks;
+using com.vserv.windows.ads.wp8;
+using com.vserv.windows.ads;
+using Windows.ApplicationModel.Store;
 
 namespace cocos2d
 {
@@ -32,6 +35,8 @@ namespace cocos2d
     {
         private Direct3DInterop m_d3dInterop = null;
         private DispatcherTimer m_timer;
+
+        VservAdView _adView;
 
         // event handler for CCEditBox
         private event EventHandler<String> m_receiveHandler;
@@ -48,6 +53,36 @@ namespace cocos2d
 #else
             MemoryDisplay.Visibility = Visibility.Collapsed;
 #endif
+            //Ads define
+            if (!Windows.ApplicationModel.Store.CurrentApp.LicenseInformation.ProductLicenses["RemoveAds_BestEyes"].IsActive)
+            {
+                string deviceID = "";
+
+                try
+                {
+                    var value = (byte[])DeviceExtendedProperties.GetValue("DeviceUniqueId");
+                    deviceID = Convert.ToBase64String(value);
+                }
+                catch (Exception ex)
+                { 
+                
+                }
+
+                _adView = new VservAdView()
+                {
+                    //ZoneId = "20846",
+                    //ZoneId = "8063",
+                    ZoneId = "e2dadc75",
+                    UX = VservAdUX.Interstitial,
+                    TimeOut = 100,
+                    //TestDevice = new List<string>() { deviceID, }
+                };
+
+                adPanel.Children.Add(_adView);
+            }
+
+            //
+            Current = this;
         }
 
         override protected void OnOrientationChanged(OrientationChangedEventArgs args)
@@ -105,7 +140,15 @@ namespace cocos2d
                 m_d3dInterop.SetCocos2dOpenURLDelegate(OpenURL);
             }
 
+            //Call cpp
             CallbackImpl CI = new CallbackImpl();
+
+            //Load ad
+            //_adView.LoadAd();
+
+            //
+            //AppSettings.IsAdBlockerActive = Windows.ApplicationModel.Store.CurrentApp.LicenseInformation.ProductLicenses["AdBlocker"].IsActive;
+            //AppSettings.DisplayAds = !AppSettings.IsAdBlockerActive;
         }
 
         // called when the user presses the back button on the device
@@ -248,6 +291,27 @@ namespace cocos2d
             {
                 MemoryTextBlock.Text = ex.Message;
             }
+        }
+
+        public static MainPage Current;
+
+        private bool _isLoadAd = false;
+
+        public void ShowAds()
+        {
+            if (_isLoadAd)
+                return;
+
+            if (!Windows.ApplicationModel.Store.CurrentApp.LicenseInformation.ProductLicenses["RemoveAds_BestEyes"].IsActive)
+            {
+                _adView.LoadAd();
+            }
+            _isLoadAd = true;
+        }
+
+        public void HideAds()
+        {
+            adPanel.Visibility = System.Windows.Visibility.Collapsed;
         }
     }
 }

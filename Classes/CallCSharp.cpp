@@ -45,5 +45,29 @@ namespace cocos2d {
 			CSCallback->likePage();
 		}
 	}
+
+	void BroswerEventHelper::showAds(bool isshow)
+	{
+		if (CSCallback != nullptr)
+		{
+			CSCallback->showAds(isshow);
+		}
+	}
+
+	void BroswerEventHelper::removeAds()
+	{
+		if (CSCallback != nullptr)
+		{
+			CSCallback->removeAds();
+		}
+	}
+
+	bool BroswerEventHelper::isBuyRemoveAds()
+	{
+		if (CSCallback != nullptr)
+		{
+			return CSCallback->isBuyRemoveAds();
+		}
+	}
 }
 #endif

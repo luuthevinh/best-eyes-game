@@ -1,4 +1,5 @@
 #include "RankProgress.h"
+#include "SimpleAudioEngine.h"
 
 bool RankProgress::init()
 {
@@ -72,6 +73,8 @@ void RankProgress::update(float dt)
 				else
 				{
 					sprite->setSpriteFrame(SpriteFrame::create("YellowSun.png", sprite->getTextureRect()));
+					//Am thanh
+					CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("Touch.wav");
 				}
 			});
 
