@@ -1,18 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Deployment xmlns="http://schemas.microsoft.com/windowsphone/2012/deployment" AppPlatformVersion="8.0">
   <DefaultLanguage xmlns="" code="en-US" />
-  <App xmlns="" ProductID="{f2bde5a7-9b1a-4b34-82c3-6b957e6d2da6}" Title="The Best Eyes" RuntimeType="Silverlight" Version="1.0.0.1" Genre="apps.normal" Author="The Vinh Luu" Description="" Publisher="14Games" PublisherID="{BD9AB9D9-C69C-4244-8236-2B6F475E0D03}">
+  <App xmlns="" ProductID="{f2bde5a7-9b1a-4b34-82c3-6b957e6d2da6}" Title="The Best Eyes" RuntimeType="Silverlight" Version="1.0.0.2" Genre="apps.normal" Author="The Vinh Luu" Description="" Publisher="14Gamez" PublisherID="{BD9AB9D9-C69C-4244-8236-2B6F475E0D03}">
     <IconPath IsRelative="true" IsResource="false">BestEye_Icon.png</IconPath>
     <Capabilities>
       <Capability Name="ID_CAP_NETWORKING" />
       <Capability Name="ID_CAP_MEDIALIB_AUDIO" />
       <Capability Name="ID_CAP_MEDIALIB_PLAYBACK" />
-      <Capability Name="ID_CAP_SENSORS" />
       <Capability Name="ID_CAP_WEBBROWSERCOMPONENT" />
       <Capability Name="ID_CAP_MEDIALIB_PHOTO" />
-      <Capability Name="ID_CAP_PHONEDIALER" />
       <Capability Name="ID_CAP_IDENTITY_DEVICE" />
-      <Capability Name="ID_CAP_LOCATION" />
       <Capability Name="ID_CAP_IDENTITY_USER" />
     </Capabilities>
     <Tasks>

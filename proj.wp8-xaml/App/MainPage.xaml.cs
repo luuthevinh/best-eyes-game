@@ -25,18 +25,17 @@ using System.Windows.Threading;
 using Microsoft.Phone.Info;
 using Windows.Graphics.Display;
 using Microsoft.Phone.Tasks;
-using com.vserv.windows.ads.wp8;
-using com.vserv.windows.ads;
 using Windows.ApplicationModel.Store;
+using GoogleAds;
 
 namespace cocos2d
 {
     public partial class MainPage : PhoneApplicationPage
     {
+        private InterstitialAd _interstitialAd;
+
         private Direct3DInterop m_d3dInterop = null;
         private DispatcherTimer m_timer;
-
-        VservAdView _adView;
 
         // event handler for CCEditBox
         private event EventHandler<String> m_receiveHandler;
@@ -56,33 +55,35 @@ namespace cocos2d
             //Ads define
             if (!Windows.ApplicationModel.Store.CurrentApp.LicenseInformation.ProductLicenses["RemoveAds_BestEyes"].IsActive)
             {
-                string deviceID = "";
+                //string deviceID = "";
 
-                try
-                {
-                    var value = (byte[])DeviceExtendedProperties.GetValue("DeviceUniqueId");
-                    deviceID = Convert.ToBase64String(value);
-                }
-                catch (Exception ex)
-                { 
+                //try
+                //{
+                //    var value = (byte[])DeviceExtendedProperties.GetValue("DeviceUniqueId");
+                //    deviceID = Convert.ToBase64String(value);
+                //}
+                //catch (Exception ex)
+                //{ 
                 
-                }
+                //}
 
-                _adView = new VservAdView()
-                {
-                    //ZoneId = "20846",
-                    //ZoneId = "8063",
-                    ZoneId = "e2dadc75",
-                    UX = VservAdUX.Interstitial,
-                    //TimeOut = 10,
-                    //TestDevice = new List<string>() { deviceID, }
-                };
+                _interstitialAd = new InterstitialAd("ca-app-pub-4328776872444632/1316913701");
+                AdRequest adRequest = new AdRequest();
 
-                adPanel.Children.Add(_adView);
+                //Test
+                //adRequest.ForceTesting = true;
+
+                _interstitialAd.ReceivedAd += OnReceivedAd;
+                _interstitialAd.LoadAd(adRequest);
             }
 
             //
             Current = this;
+        }
+
+        private void OnReceivedAd(object sender, AdEventArgs e)
+        {
+            _interstitialAd.ShowAd();
         }
 
         override protected void OnOrientationChanged(OrientationChangedEventArgs args)
@@ -143,12 +144,6 @@ namespace cocos2d
             //Call cpp
             CallbackImpl CI = new CallbackImpl();
 
-            //Load ad
-            //_adView.LoadAd();
-
-            //
-            //AppSettings.IsAdBlockerActive = Windows.ApplicationModel.Store.CurrentApp.LicenseInformation.ProductLicenses["AdBlocker"].IsActive;
-            //AppSettings.DisplayAds = !AppSettings.IsAdBlockerActive;
         }
 
         // called when the user presses the back button on the device
@@ -304,14 +299,14 @@ namespace cocos2d
 
             if (!Windows.ApplicationModel.Store.CurrentApp.LicenseInformation.ProductLicenses["RemoveAds_BestEyes"].IsActive)
             {
-                _adView.LoadAd();
+                //Show ad
             }
             _isLoadAd = true;
         }
 
         public void HideAds()
         {
-            adPanel.Visibility = System.Windows.Visibility.Collapsed;
+           
         }
     }
 }

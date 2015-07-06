@@ -268,11 +268,8 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="com.vserv.windows.ads.wp8">
-      <HintPath>..\..\..\Vserv-VMAX-WP8-SDK-and-Sample\VMAXSDKWP8\packages\VMAX\com.vserv.windows.ads.wp8.dll</HintPath>
-    </Reference>
-    <Reference Include="com.vserv.windowsPhone.ads.mediation">
-      <HintPath>..\..\..\Vserv-VMAX-WP8-SDK-and-Sample\VMAXSDKWP8\packages\VMAX\com.vserv.windowsPhone.ads.mediation.dll</HintPath>
+    <Reference Include="GoogleAds">
+      <HintPath>..\..\..\googlemobileadssdkwindowsphone8\GoogleMobileAdsSdkWindowsPhone8-6.5.13\lib\windowsphone8\GoogleAds.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />
