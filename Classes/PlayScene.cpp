@@ -151,6 +151,8 @@ void PlayScene::drawSquare(int width, Vec2 position, float opacity)
 	drawnode->setPosition(position.x + _squareWidth / 2, position.y - _squareWidth / 2);
 	drawnode->setName("square");
 
+	this->setColor(Color3B( _colorLevel));
+	this->runAction(TintTo::create(0.5f, Color3B::WHITE));
 }
 
 void PlayScene::drawGrid(int row, int col)
@@ -320,6 +322,12 @@ void PlayScene::createLevel()
 		case 18:
 		{
 			_opacityScoreSquare = 0.9f;
+			break;
+		}
+
+		case 25:
+		{
+			_opacityScoreSquare = 0.95f;
 			break;
 		}
 	}

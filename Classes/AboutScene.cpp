@@ -36,7 +36,7 @@ bool AboutScene::init()
 	logo->setPosition(origin.x + visibleSize.width / 2, origin.y + (visibleSize.height / 4) * 3);
 	this->addChild(logo);
 
-	auto nameLabel = LabelTTF::create("The Best Eyes - 1.0.0.1", "fonts/arial.ttf", 30);
+	auto nameLabel = LabelTTF::create("The Best Eyes - 1.0.0.3", "fonts/arial.ttf", 30);
 	nameLabel->setColor(Color3B::BLACK);
 	nameLabel->setPosition(origin.x + visibleSize.width / 2, logo->getBoundingBox().getMinY() - nameLabel->getContentSize().height / 2 - 50);
 	this->addChild(nameLabel);
